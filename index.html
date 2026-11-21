@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سامانه کیفیت دوزندگی J4 Eagle</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f5f9;color:#1d2a3b;font:15px Tahoma,Arial}header{background:#173454;color:#fff;padding:12px 4%;border-bottom:4px solid #d4a63b;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.w{max-width:1000px;margin:14px auto;padding:0 10px}button,select,input{font:inherit}button{border:0;border-radius:10px;padding:12px 14px;cursor:pointer;background:#e6edf5;color:#173454}.tabs,.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.tabs button.on,.chip.on,.pri{background:#205a9d;color:#fff}.chip{min-width:70px}.card{background:#fff;border:1px solid #e0e6ee;border-radius:12px;padding:14px;margin:10px 0}.card.new{border-color:#d4a63b;background:#fffaf0}h3{margin:6px 0;color:#173454}.dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}.d{background:#f7f9fc;border:1px solid #dce3ec;border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:6px}.d.has{background:#fff0f0;border-color:#e3a5ab}.d b{background:#b42332;color:#fff;border-radius:20px;padding:2px 9px}.d i{font-style:normal;font-size:12px;color:#667}.st{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.st strong{font-size:26px;min-width:60px;text-align:center}.ok{background:#13805b!important;color:#fff}.no{background:#c03948!important;color:#fff}.it{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #eef1f5}.it span{flex:1}em{background:#d4a63b;color:#fff;border-radius:6px;padding:1px 8px;font-style:normal;font-size:12px}.m{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}.m div{background:#fff;border:1px solid #e0e6ee;border-radius:10px;padding:10px}.m strong{display:block;font-size:22px}.bar{background:#e8eef5;border-radius:9px;height:12px}.bar i{display:block;height:100%;background:#d4a63b;border-radius:9px}.br{display:grid;grid-template-columns:150px 1fr 30px;gap:6px;margin:6px 0;align-items:center}input,select{padding:10px;border:1px solid #cbd5e1;border-radius:8px}svg{width:100%;height:auto}.big{width:100%;padding:16px;font-size:17px;margin-top:12px}small{color:#667}
+body{font-family:Vazirmatn,Tahoma,Arial;line-height:1.7;background:linear-gradient(#eef3f9,#f6f8fb) fixed}
+header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,#102a47,#205a9d);box-shadow:0 3px 14px #0003;border-bottom:3px solid #d4a63b}
+header button{background:#ffffff22;color:#fff;padding:7px 14px}
+.tabs{position:sticky;top:62px;z-index:10;background:#eef3f9ee;backdrop-filter:blur(6px);padding:8px 0;margin:0 0 6px}
+.tabs button{flex:1;min-width:110px;font-weight:bold;box-shadow:0 1px 3px #0001}
+button{transition:.15s}button:hover{filter:brightness(.95)}button:active{transform:scale(.96)}
+.card{box-shadow:0 2px 10px #1b2f4b14;border:0;border-radius:16px;padding:18px}
+.card h3{border-right:4px solid #d4a63b;padding-right:10px;margin:14px 0 8px;font-size:15px}.card h3:first-child{margin-top:0}
+.chip{border:2px solid transparent;border-radius:12px;padding:12px 16px;font-weight:bold}.chip.on{box-shadow:0 3px 10px #205a9d55}
+.st{background:#f4f7fb;border-radius:14px;padding:10px;justify-content:center}.st strong{font-size:34px;color:#173454;min-width:90px}.st button{min-width:56px;font-weight:bold}
+.d{cursor:pointer;border-radius:12px;min-height:52px;transition:.15s}.d:hover{border-color:#205a9d;background:#eef5ff}.d.has{box-shadow:0 2px 8px #b4233222}.d b{font-size:16px}
+.it{padding:10px 0}.it button{min-width:64px;font-weight:bold}
+.big{position:sticky;bottom:10px;z-index:5;border-radius:14px;font-weight:bold;box-shadow:0 6px 18px #205a9d66}
+.m div{border:0;border-radius:14px;box-shadow:0 2px 10px #1b2f4b14;border-top:4px solid #d4a63b}.m strong{color:#205a9d;font-size:28px}
+.card.new{border-right:5px solid #d4a63b}
+em{box-shadow:0 1px 4px #d4a63b88}
+.br .bar{height:14px}.bar i{background:linear-gradient(90deg,#d4a63b,#e8c46b)}
+.sync{font-size:12px;background:#13805b;padding:2px 8px;border-radius:20px;margin-right:6px}
+@media(max-width:600px){.w{padding:0 8px}.tabs{top:56px}.card{padding:14px}.chip{flex:1}}
+</style>
+</head>
+<body>
+<div id="app"><div class="w"><div class="card" style="text-align:center">در حال اتصال به فضای ابری آرمان موتور...</div></div></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBgkfQeWzH4xF0AIs89sA-6ZhAXmg2RCxM",
+  authDomain: "amc-qc.firebaseapp.com",
+  projectId: "amc-qc",
+  storageBucket: "amc-qc.firebasestorage.app",
+  messagingSenderId: "998599036068",
+  appId: "1:998599036068:web:16223d7e9170bc3e9faa31",
+  measurementId: "G-6ECG1HXRC7"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const PR=["پشتی جلو","پشتی عقب","هدرست جلو","کفی جلو","کفی عقب"],TY={insp:"بازرسی",clr:"مجوز شروع"},RL={insp:"بازرس",expert:"کارشناس",admin:"ادمین"};
+const SEW=[["CT","چروک"],["CX","پرفراژ غیریکنواخت"],["CG","پانچ غیریکنواخت"],["CH","جدا شدن"],["CI","سوزن‌زدگی"],["CB","ضخامت"],["CQ","گام دوخت غیریکنواخت"],["CJ","ضعیف بودن دوخت اصلی"],["CW","باز بودن دوخت اصلی"],["CU","مسیر اشتباه دوخت"],["CY","رنگ نخ تزئیناتی"],["CK","باز بودن دوخت تزئیناتی"],["CR","ضعیف بودن دوخت تزئیناتی"],["CP","جدا بودن چرم از لمینه"],["T","نقص عملکرد قطعه"],["B","زدگی"],["W","شکستگی"],["U","دفرمگی"],["X","پارگی"],["Y","گپ"],["G","کسری قطعه"],["H","مونتاژ ناصحیح"],["I","کثیفی"],["K","تفاوت رنگ"],["L","ایراد ابعادی"],["M","پلیسه جوش"],["N","صدای اضافه"],["P","نبود تیک/مهر"],["O","سایر"]];
+const CUT=[["C1","چرم: زدگی/پارگی/دورنگی/شکستگی/لمینه"],["C2","چرم: عدم انطباق با الگو"],["C3","اثر کثیفی"],["C4","شیدرنگی چرم"],["C5","نانوون: زدگی/پارگی/کچلی"],["C6","پارچه: لمینه/نخ‌کشی/زدگی/پارگی"],["C7","عدم انطباق پارچه/نانوون با الگو"]];
+const CLR=["استفاده از تجهیزات حفاظت فردی","حضور اپراتور در ایستگاه خود","اصول 5S","شارژ قطعات در پالت","فشار باد چرخ‌ها (۴ تا ۶ بار)","تنظیم چرخ (گام ۴-۵، سوزن ۱۸)","تست دوخت (هر ۲ ساعت)","دوک نخ (POLYART 901 / 9510)","درجه اتو (۲ یا ۳)","کنترل چرم","کنترل دوخت و دوز","کنترل محصول نهایی (AQL)","بسته‌بندی محصول"];
+let U={}, R=[], me=null, fbUser=null, tab="", op=null, flt="", F, ch={st:"",pr:""}, unsubR=null, unsubU=null, authReady=false;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),sum=o=>Object.values(o).reduce((a,b)=>a+b,0),$=id=>document.getElementById(id);
+const fd=d=>new Date(d).toLocaleDateString("fa-IR"),dpm=r=>r.sample?Math.round(sum(r.def)/r.sample*1e6):0;
+const nf=()=>({stage:"sew",pr:0,shift:"A",sample:0,def:{},items:{} });F=nf();
+const tabs=()=>me.r=="insp"?[["ins","ثبت بازرسی"],["clr","مجوز شروع"],["mine","گزارش‌های من"]]:[["rep","گزارش‌ها"],["dash","داشبورد DPM"]].concat(me.r=="admin"?[["usr","تنظیم نقش‌ها"]]:[]);
+function resolveProfile(user){
+  const uname = user.email.split("@")[0].toLowerCase();
+  if(U[uname]) return { id: uname, n: U[uname].n, r: U[uname].r };
+  const autoRole = uname.includes("admin") ? "admin" : (uname.includes("expert") || uname.includes("karshenas") ? "expert" : "insp");
+  return { id: uname, n: uname, r: autoRole };
+}
+onAuthStateChanged(auth, (user) => {
+  authReady = true; fbUser = user;
+  if(unsubR){ unsubR(); unsubR = null; } if(unsubU){ unsubU(); unsubU = null; }
+  if(!user){ me = null; R = []; U = {}; draw(); return; }
+  unsubU = onSnapshot(collection(db, "j4_users"), (snap) => {
+    const map = {}; snap.forEach(d => { map[d.id] = d.data(); }); U = map; me = resolveProfile(user); draw();
+  });
+  const q = query(collection(db, "j4_reports"), orderBy("date", "desc"));
+  unsubR = onSnapshot(q, (snap) => { const arr = []; snap.forEach(d => { arr.push({ docId: d.id, ...d.data() }); }); R = arr; if(me) draw(); });
+});
+function draw(){
+  const a=$("app"); if(!authReady) return;
+  if(!fbUser || !me){
+    a.innerHTML=`<div class="w"><div class="card" style="max-width:420px;margin:40px auto"><h3>ورود به سامانه کیفیت دوزندگی J4 Eagle</h3><p><input id="lu" placeholder="نام کاربری (مثلاً admin یا qc1)" style="width:100%" dir="ltr"></p><p><input id="lp" type="password" placeholder="رمز عبور" style="width:100%" dir="ltr" onkeydown="if(event.key==='Enter')login()"></p><button class="pri big" id="lbtn" onclick="login()">ورود به سامانه</button><p id="lerr" style="color:#c03948;font-size:13px;margin-top:8px"></p></div></div>`; return;
+  }
+  const nw=me.r=="insp"?0:R.filter(r=>!(r.seen&&r.seen[me.n])).length;
+  if(!tab||!tabs().some(t=>t[0]==tab))tab=tabs()[0][0];
+  a.innerHTML=`<header><b>سالن دوزندگی J4 Eagle | ${esc(me.n)} (${RL[me.r]}) <span class="sync">آنلاین</span></b><span>${nw?`<em>${nw} گزارش جدید</em> `:""}<button onclick="logout()">خروج</button></span></header><div class="w"><div class="tabs">${tabs().map(t=>`<button class="${tab==t[0]?"on":""}" onclick="setTab('${t[0]}')">${t[1]}</button>`).join("")}</div>${{ins:vIns,clr:vClr,mine:vMine,rep:vRep,dash:vDash,usr:vUsr}[tab]()}</div>`;
+}
+window.setTab = function(t){ tab = t; op = null; draw(); };
+window.login = async function(){
+  let u = $("lu").value.trim().toLowerCase(); const p = $("lp").value;
+  if(!u || !p){ $("lerr").textContent = "نام کاربری و رمز عبور را وارد کنید."; return; }
+  if(!u.includes("@")) u = u + "@amc.com";
+  const btn = $("lbtn"); btn.disabled = true; btn.textContent = "در حال ورود..."; $("lerr").textContent = "";
+  try{ await signInWithEmailAndPassword(auth, u, p); }
+  catch(e){ btn.disabled = false; btn.textContent = "ورود به سامانه"; $("lerr").textContent = "نام کاربری یا رمز عبور اشتباه است (یا اینترنت قطع است)."; }
+};
+window.logout = async function(){ await signOut(auth); };
+const chips=(list,cur,fn)=>`<div class="chips">${list.map(([v,t])=>`<button class="chip ${cur==v?"on":""}" onclick="${fn}('${v}')">${t}</button>`).join("")}</div>`;
+const setF=(k,v)=>{F[k]=k=="pr"?+v:v;if(k=="stage")F.def={};draw()};
+function vIns(){const dl=F.stage=="cut"?CUT:SEW,n=sum(F.def);return `<div class="card"><h3>۱) مرحله</h3>${chips([["cut","حین برش"],["sew","محصول نهایی (دوخت)"]],F.stage,"setStage")}<h3>۲) محصول</h3>${chips(PR.map((p,i)=>[i,p]),F.pr,"setPr")}<h3>۳) شیفت</h3>${chips([["A","A"],["B","B"],["C","C"]],F.shift,"setSh")}<h3>۴) تعداد قطعات بازرسی‌شده</h3><div class="st"><button onclick="sm(-10)">−۱۰</button><button onclick="sm(-1)">−۱</button><strong>${F.sample}</strong><button onclick="sm(1)">+۱</button><button onclick="sm(10)">+۱۰</button><button onclick="sm(50)">+۵۰</button></div></div><div class="card"><h3>۵) ایرادات (روی هر مورد بزنید؛ هر بار ۱ عدد اضافه می‌شود)</h3><div class="dg">${dl.map(([c,t])=>`<div class="d ${F.def[c]?"has":""}" onclick="df('${c}',1)"><span><i>${c}</i> ${t}</span>${F.def[c]?`<span><b>${F.def[c]}</b> <button onclick="event.stopPropagation();df('${c}',-1)">−</button></span>`:""}</div>`).join("")}</div><p>جمع ایرادات: <b>${n}</b> | DPM این گزارش: <b>${F.sample?Math.round(n/F.sample*1e6):0}</b></p></div><button class="pri big" id="sbtn" onclick="subIns()">ثبت نهایی و ارسال ابری به کارشناس</button>`}
+window.setStage=v=>setF("stage",v); window.setPr=v=>setF("pr",v); window.setSh=v=>setF("shift",v);
+window.sm=d=>{F.sample=Math.max(0,F.sample+d);draw()};
+window.df=(c,d)=>{F.def[c]=Math.max(0,(F.def[c]||0)+d);if(!F.def[c])delete F.def[c];draw()};
+const nid=()=>"QC-"+String(R.length+1).padStart(4,"0");
+window.subIns = async function(){
+  if(!F.sample)return alert("تعداد قطعات بازرسی‌شده را مشخص کنید");
+  const btn=$("sbtn"); btn.disabled=true; btn.textContent="در حال ارسال به سرور...";
+  const docId = "rep_" + Date.now();
+  try{
+    await setDoc(doc(db, "j4_reports", docId), {id: nid(), type: "insp", date: new Date().toISOString(), user: me.n, product: PR[F.pr], shift: F.shift, stage: F.stage, sample: F.sample, def: {...F.def}, seen: {}});
+    F=nf(); alert("با موفقیت در فضای ابری ثبت شد و برای کارشناس ارسال گردید."); tab="mine"; draw();
+  }catch(e){ btn.disabled=false; btn.textContent="ثبت نهایی و ارسال ابری به کارشناس"; alert("خطا در اتصال به اینترنت: " + e.message); }
+};
+function vClr(){return `<div class="card"><h3>محصول</h3>${chips(PR.map((p,i)=>[i,p]),F.pr,"setPr")}<h3>شیفت</h3>${chips([["A","A"],["B","B"],["C","C"]],F.shift,"setSh")}</div><div class="card"><h3>چک‌لیست تصدیق شروع تولید</h3>${CLR.map((t,i)=>`<div class="it"><span>${t}</span><button class="${F.items[i]==1?"ok":""}" onclick="ci(${i},1)">OK</button><button class="${F.items[i]==2?"no":""}" onclick="ci(${i},2)">NOK</button></div>`).join("")}</div><button class="pri big" id="cbtn" onclick="subClr()">ثبت نهایی مجوز در سرور</button>`}
+window.ci=(i,v)=>{F.items[i]=v;draw()};
+window.subClr = async function(){
+  if(Object.keys(F.items).length<CLR.length)return alert("همه بندها باید OK یا NOK شوند");
+  const btn=$("cbtn"); btn.disabled=true; btn.textContent="در حال ثبت مجوز...";
+  const bad=CLR.filter((t,i)=>F.items[i]==2), docId = "clr_" + Date.now();
+  try{
+    await setDoc(doc(db, "j4_reports", docId), {id: nid(), type: "clr", date: new Date().toISOString(), user: me.n, product: PR[F.pr], shift: F.shift, bad, ok: !bad.length, seen: {}});
+    F=nf(); alert(bad.length?"ثبت شد؛ شروع تولید تا رفع موارد NOK مجاز نیست.":"مجوز شروع تأیید و در سرور ثبت شد."); tab="mine"; draw();
+  }catch(e){ btn.disabled=false; btn.textContent="ثبت نهایی مجوز در سرور"; alert("خطا در ارسال: " + e.message); }
+};
+function seenTxt(r){const k=Object.keys(r.seen||{});return k.length?"✔ دیده‌شده توسط: "+k.map(esc).join("، "):"هنوز دیده نشده"}
+const sm1=r=>r.type=="insp"?`DPM ${dpm(r)}`:r.ok?"✔ تأیید":"✖ عدم تأیید";
+const head=r=>`<b>${r.id}</b> · ${TY[r.type]} · ${esc(r.product)} · شیفت ${r.shift} · ${fd(r.date)} · ${esc(r.user)} · <b>${sm1(r)}</b>`;
+function vMine(){const l=R.filter(r=>r.user==me.n);return l.map(r=>`<div class="card">${head(r)}<br><small>${seenTxt(r)}</small></div>`).join("")||`<div class="card">گزارشی ثبت نکرده‌اید.</div>`}
+function det(r){const dn=Object.fromEntries(SEW.concat(CUT));return `<hr>${r.type=="insp"?`مرحله: ${r.stage=="cut"?"حین برش":"محصول نهایی"} | بازرسی‌شده: ${r.sample} | ایرادات: ${sum(r.def)}<br>${Object.entries(r.def).map(([c,n])=>`${dn[c]} (${c}): <b>${n}</b>`).join("<br>")||"بدون ایراد"}`:(r.bad.length?"موارد NOK:<br>"+r.bad.join("<br>"):"همه بندها OK")}<br><small>${seenTxt(r)}</small>`}
+function vRep(){const l=R.filter(r=>!flt||!(r.seen&&r.seen[me.n]));return `${chips([["","همه"],["n","فقط ندیده‌ها"]],flt,"setFlt")}`+(l.map(r=>{const n=!(r.seen&&r.seen[me.n]);return `<div class="card ${n?"new":""}" onclick="opn('${r.docId}')">${head(r)} ${n?"<em>جدید</em>":""}${op==r.docId?det(r):""}</div>`}).join("")||`<div class="card">گزارشی نیست.</div>`)}
+window.setFlt=v=>{flt=v;draw()};
+window.opn = async function(docId){
+  op = op==docId ? null : docId; const r = R.find(x=>x.docId==docId); draw();
+  if(op && r && !(r.seen && r.seen[me.n])){try{await updateDoc(doc(db, "j4_reports", docId), { [`seen.${me.n}`]: new Date().toISOString() });}catch(e){}}
+};
+const dk=d=>new Date(d).toLocaleDateString("en-CA");
+function buckets(list,wk){
+  const o=[],N=wk?8:14;
+  for(let i=N-1;i>=0;i--){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(wk?i*7:i));if(wk)d.setDate(d.getDate()-((d.getDay()+1)%7));o.push({d,k:dk(d),s:0,n:0})}
+  list.forEach(r=>{const d=new Date(r.date);d.setHours(0,0,0,0);if(wk)d.setDate(d.getDate()-((d.getDay()+1)%7));const b=o.find(x=>x.k==dk(d));if(b){b.s+=r.sample;b.n+=sum(r.def)}});
+  return o.map(b=>({l:b.d.toLocaleDateString("fa-IR",{month:"numeric",day:"numeric"}),v:b.s?Math.round(b.n/b.s*1e6):0,e:!b.s}));
+}
+function chart(b){const mx=Math.max(1,...b.map(x=>x.v)),w=640/b.length;return `<svg viewBox="0 0 640 230" direction="ltr">${b.map((x,i)=>{const h=x.v/mx*150;return `<rect x="${i*w+w*.15}" y="${180-h}" width="${w*.7}" height="${h}" fill="${x.e?"#dfe5ee":"#205a9d"}" rx="3"/><text x="${i*w+w/2}" y="${172-h}" font-size="11" text-anchor="middle">${x.e?"":x.v}</text><text x="${i*w+w/2}" y="200" font-size="11" text-anchor="middle">${x.l}</text>`}).join("")}<line x1="0" x2="640" y1="180" y2="180" stroke="#9aa7b8"/></svg>`}
+function vDash(){
+  const l=R.filter(r=>r.type=="insp"&&(!ch.st||r.stage==ch.st)&&(ch.pr===""||r.product==PR[ch.pr])),s=l.reduce((a,r)=>a+r.sample,0),n=l.reduce((a,r)=>a+sum(r.def),0),c={};
+  l.forEach(r=>Object.entries(r.def).forEach(([k,v])=>c[k]=(c[k]||0)+v));
+  const dn=Object.fromEntries(SEW.concat(CUT)),top=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,8),mx=top.length?top[0][1]:1;
+  return `<div class="card"><h3>فیلتر</h3>${chips([["","همه مراحل"],["cut","برش"],["sew","محصول نهایی"]],ch.st,"setCs")}${chips([["","همه محصولات"]].concat(PR.map((p,i)=>[i,p])),ch.pr,"setCp")}</div><div class="m"><div>بازرسی‌شده<strong>${s}</strong></div><div>تعداد ایرادات<strong>${n}</strong></div><div>DPM کل<strong>${s?Math.round(n/s*1e6):0}</strong></div></div><div class="card"><h3>DPM روزانه (۱۴ روز اخیر)</h3>${chart(buckets(l,0))}</div><div class="card"><h3>DPM هفتگی (۸ هفته اخیر، شروع از شنبه)</h3>${chart(buckets(l,1))}</div><div class="card"><h3>پرتکرارترین ایرادات</h3>${top.map(([k,v])=>`<div class="br"><span>${dn[k]}</span><div class="bar"><i style="width:${v/mx*100}%"></i></div><b>${v}</b></div>`).join("")||"داده‌ای نیست."}</div>`;
+}
+window.setCs=v=>{ch.st=v;draw()}; window.setCp=v=>{ch.pr=v;draw()};
+function vUsr(){
+  const entries = Object.entries(U);
+  return `<div class="card"><h3>تعریف نام نمایشی و سطح دسترسی کاربران فایربیس</h3><small>ابتدا کاربر را در بخش Authentication فایربیس (با پسوند @amc.com) بسازید، سپس اینجا نام کاربری (بخش قبل از @) و سمت او را ثبت کنید:</small><hr>${entries.map(([id,u])=>`<div class="it"><span><b>${esc(id)}</b> ← ${esc(u.n)} (${RL[u.r]})</span><button class="no" onclick="delU('${esc(id)}')">حذف</button></div>`).join("") || "<p><small>هنوز نقشی تعریف نشده است.</small></p>"}<p style="display:flex;gap:6px;flex-wrap:wrap"><input id="uid" placeholder="نام کاربری (مثلاً qc1)" dir="ltr"> <input id="nn" placeholder="نام و نام خانوادگی"> <select id="nr"><option value="insp">بازرس</option><option value="expert">کارشناس</option><option value="admin">ادمین</option></select> <button class="pri" onclick="addU()">ثبت نقش</button></p></div>`;
+}
+window.addU = async function(){
+  const id=$("uid").value.trim().toLowerCase().split("@")[0], n=$("nn").value.trim(), r=$("nr").value;
+  if(!id||!n) return alert("نام کاربری و نام نمایشی لازم است.");
+  await setDoc(doc(db, "j4_users", id), { n, r }); $("uid").value=""; $("nn").value="";
+};
+window.delU = async function(id){if(confirm("نقش این کاربر حذف شود؟")) await deleteDoc(doc(db, "j4_users", id));};
+</script>
+</body>
+</html>
